@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora de Compra</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .contenedor { max-width: 400px; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
+        input { width: 90%; padding: 8px; margin-bottom: 10px; }
+        button { padding: 10px; width: 100%; background-color: #28a745; color: white; border: none; cursor: pointer; }
+        .error { color: red; font-weight: bold; }
+        .resultado { margin-top: 15px; padding: 10px; background-color: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <h2>Calculadora de Compra</h2>
+        <a href="index.html">← Volver al menú</a>
+        <hr>
+        
+        <label>Precio Unitario ($):</label>
+        <input type="number" id="precio" step="0.01" placeholder="Ej: 12.50">
+
+        <label>Cantidad (unidades):</label>
+        <input type="number" id="cantidad" placeholder="Ej: 3">
+
+        <button onclick="calcularTotal()">Calcular total</button>
+
+        <div id="mensajeError" class="error"></div>
+        <div id="zonaResultado" class="resultado" style="display: none;"></div>
+    </div>
+
+    <script>
+        function calcularTotal() {
+            const precioInput = document.getElementById("precio").value;
+            const cantidadInput = document.getElementById("cantidad").value;
+            const divError = document.getElementById("mensajeError");
+            const divResultado = document.getElementById("zonaResultado");
+            
+            divError.innerHTML = "";
+            divResultado.style.display = "none";
+
+            if (precioInput === "" || cantidadInput === "") {
+                divError.innerHTML = "Error: Existen campos vacíos.";
+                return;
+            }
+
+            const precio = parseFloat(precioInput);
+            const cantidad = Number(cantidadInput);
+
+            if (precio <= 0) {
+                divError.innerHTML = "Error: El precio debe ser mayor que cero.";
+                return;
+            }
+
+            if (!Number.isInteger(cantidad) || cantidad <= 0) {
+                divError.innerHTML = "Error: La cantidad debe ser un número entero positivo.";
+                return;
+            }
+
+            let subtotal = precio * cantidad;
+            let descuento = 0;
+
+            if (subtotal >= 100) {
+                descuento = subtotal * 0.10;
+            }
+
+            let totalFinal = subtotal - descuento;
+
+            divResultado.style.display = "block";
+            divResultado.innerHTML = `
+                <p>Subtotal: $${subtotal.toFixed(2)}</p>
+                <p>Descuento: $${descuento.toFixed(2)}</p>
+                <p><strong>Total a Pagar: $${totalFinal.toFixed(2)}</strong></p>
+            `;
+        }
+    </script>
+</body>
+</html>

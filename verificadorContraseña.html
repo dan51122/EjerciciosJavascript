@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Verificador de Contraseña</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .contenedor { max-width: 400px; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
+        input { width: 90%; padding: 8px; margin-bottom: 10px; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin: 5px 0; padding: 5px; border-radius: 3px; }
+        .cumple { background-color: #d4edda; color: #155724; }
+        .nocumple { background-color: #f8d7da; color: #721c24; }
+        .exito { color: #28a745; font-weight: bold; font-size: 1.1em; text-align: center; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <h2>Verificador de Contraseña</h2>
+        <a href="index.html">← Volver al menú</a>
+        <hr>
+
+        <label>Escribe una contraseña (Ejemplo):</label>
+        <input type="text" id="clave" oninput="verificarClave()" placeholder="Escribe aquí...">
+
+        <ul id="listaReglas">
+            <li id="regla1" class="nocumple">❌ Al menos 8 caracteres</li>
+            <li id="regla2" class="nocumple">❌ Al menos un dígito (0-9)</li>
+            <li id="regla3" class="nocumple">❌ Sin espacios en blanco</li>
+        </ul>
+
+        <div id="mensajeExito" class="exito"></div>
+    </div>
+
+    <script>
+        function verificarClave() {
+            const clave = document.getElementById("clave").value;
+            
+            const esLarga = clave.length >= 8;
+            actualizarUI("regla1", esLarga, "Al menos 8 caracteres");
+
+            let tieneDigito = false;
+            for (let i = 0; i < clave.length; i++) {
+                if (clave[i] >= '0' && clave[i] <= '9') {
+                    tieneDigito = true;
+                    break;
+                }
+            }
+            actualizarUI("regla2", tieneDigito, "Al menos un dígito (0-9)");
+
+            let sinEspacios = !clave.includes(' ') && clave.length > 0;
+            actualizarUI("regla3", sinEspacios, "Sin espacios en blanco");
+
+            const divExito = document.getElementById("mensajeExito");
+            if (esLarga && tieneDigito && sinEspacios) {
+                divExito.innerHTML = "✅ Cumple todas las reglas";
+            } else {
+                divExito.innerHTML = "";
+            }
+        }
+
+        function actualizarUI(idElemento, cumple, texto) {
+            const elemento = document.getElementById(idElemento);
+            if (cumple) {
+                elemento.className = "cumple";
+                elemento.innerHTML = "✅ " + texto;
+            } else {
+                elemento.className = "nocumple";
+                elemento.innerHTML = "❌ " + texto;
+            }
+        }
+    </script>
+</body>
+</html>
